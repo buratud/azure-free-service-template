@@ -4,7 +4,7 @@ param username string
 @secure()
 param publicKey string
 param rgName string
-param vmSize string
+param vmSize string = 'Standard_B1s'
 param deleteWithVm bool = true
 param imageRef object
 param diskSizeGb int = 64

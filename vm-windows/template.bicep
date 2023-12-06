@@ -107,11 +107,12 @@ resource windowsVm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
       adminUsername: username
       adminPassword: password
       windowsConfiguration: {
-        enableAutomaticUpdates: false
+        enableVMAgentPlatformUpdates: true
+        enableAutomaticUpdates: true
         provisionVMAgent: true
         patchSettings: {
-          enableHotpatching: false
-          patchMode: 'Manual'
+          enableHotpatching: true
+          patchMode: 'AutomaticByPlatform'
         }
       }
     }

@@ -30,7 +30,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-05-01' = {
   }
 }
 
-resource windowsIp 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
+resource publicIp 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
   name: publicIpName
   location: location
   properties: {
@@ -38,7 +38,7 @@ resource windowsIp 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
   }
 }
 
-resource windowsNsg 'Microsoft.Network/networkSecurityGroups@2023-05-01' = {
+resource nsg 'Microsoft.Network/networkSecurityGroups@2023-05-01' = {
   name: nsgName
   location: location
   properties: {
@@ -46,7 +46,7 @@ resource windowsNsg 'Microsoft.Network/networkSecurityGroups@2023-05-01' = {
   }
 }
 
-resource windowsNic 'Microsoft.Network/networkInterfaces@2023-05-01' = {
+resource nic 'Microsoft.Network/networkInterfaces@2023-05-01' = {
   name: nicName
   location: location
   properties: {
@@ -58,7 +58,7 @@ resource windowsNic 'Microsoft.Network/networkInterfaces@2023-05-01' = {
           }
           privateIPAllocationMethod: 'Dynamic'
           publicIPAddress: {
-            id: windowsIp.id
+            id: publicIp.id
             properties: {
               deleteOption: deleteWithVm ? 'Delete' : 'Detach'
             }
@@ -67,13 +67,13 @@ resource windowsNic 'Microsoft.Network/networkInterfaces@2023-05-01' = {
       }
     ]
     networkSecurityGroup: {
-      id: windowsNsg.id
+      id: nsg.id
     }
   }
 
 }
 
-resource windowsVm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
+resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
   name: vmName
   location: location
   properties: {
@@ -95,7 +95,7 @@ resource windowsVm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
     networkProfile: {
       networkInterfaces: [
         {
-          id: windowsNic.id
+          id: nic.id
           properties: {
             deleteOption: deleteWithVm ? 'Delete' : 'Detach'
           }
@@ -126,4 +126,4 @@ resource windowsVm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
   }
 }
 
-output ip string = windowsNic.properties.ipConfigurations[0].properties.privateIPAddress
+output ip string = nic.properties.ipConfigurations[0].properties.privateIPAddress

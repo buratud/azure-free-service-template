@@ -125,3 +125,5 @@ resource windowsVm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
     }
   }
 }
+
+output ip string = windowsNic.properties.ipConfigurations[0].properties.privateIPAddress

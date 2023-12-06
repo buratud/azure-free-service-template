@@ -115,6 +115,13 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
         }
       }
     }
+    securityProfile: {
+      securityType: 'TrustedLaunch'
+      uefiSettings: {
+        secureBootEnabled: true
+        vTpmEnabled: true
+      }
+    }
   }
 }
 

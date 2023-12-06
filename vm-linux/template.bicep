@@ -104,6 +104,8 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
       computerName: vmHostName
       adminUsername: username
       linuxConfiguration: {
+        enableVMAgentPlatformUpdates: true
+        provisionVMAgent: true
         disablePasswordAuthentication: true
         ssh: {
           publicKeys: [

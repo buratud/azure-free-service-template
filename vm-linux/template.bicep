@@ -5,7 +5,6 @@ param username string
 param publicKey string
 param rgName string
 param vmSize string
-param isSpot bool = false
 param deleteWithVm bool = true
 param imageRef object
 param diskSizeGb int = 64
@@ -44,19 +43,7 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2023-05-01' = {
   location: location
   properties: {
     securityRules: [
-      {
-        name: 'SSH'
-        properties: {
-          priority: 300
-          protocol: 'Tcp'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourceAddressPrefix: '*'
-          sourcePortRange: '*'
-          destinationAddressPrefix: '*'
-          destinationPortRange: '22'
-        }
-      }
+
     ]
   }
 }
@@ -69,7 +56,7 @@ resource nic 'Microsoft.Network/networkInterfaces@2023-05-01' = {
         name: 'ipconfig1'
         properties: {
           subnet: {
-            id: vnet.properties.subnets[0].id
+            id: vnet.properties.subnets[1].id
           }
           privateIPAllocationMethod: 'Dynamic'
           publicIPAddress: {
@@ -130,10 +117,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
         }
       }
     }
-    priority: isSpot ? 'Spot' : 'Regular'
-    billingProfile: {
-      maxPrice: -1
-    }
-    evictionPolicy: 'Deallocate'
   }
 }
+
+output ip string = nic.properties.ipConfigurations[0].properties.privateIPAddress

@@ -3,19 +3,19 @@ param location string
 param username string
 @secure()
 param publicKey string
-param rgName string
+param deploymentName string
 param vmSize string = 'Standard_B1s'
 param deleteWithVm bool = true
 param imageRef object
 param diskSizeGb int = 64
 
-param vnetName string = '${rgName}-vnet'
-param nicName string = '${rgName}-nic'
-param nsgName string = '${rgName}-nsg'
-param publicIpName string = '${rgName}-ip'
-param vmName string = rgName
-param osDiskName string = '${rgName}-osdisk'
-param vmHostName string = rgName
+param vnetName string = '${deploymentName}-vnet'
+param nicName string = '${deploymentName}-nic'
+param nsgName string = '${deploymentName}-nsg'
+param publicIpName string = '${deploymentName}-ip'
+param vmName string = deploymentName
+param osDiskName string = '${deploymentName}-osdisk'
+param vmHostName string = deploymentName
 
 resource vnet 'Microsoft.Network/virtualNetworks@2023-05-01' = {
   name: vnetName

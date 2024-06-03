@@ -1,0 +1,18 @@
+using 'template.bicep'
+
+param deploymentName = /* Deployment name */
+
+param imageRef =  {
+  offer: 'ubuntu-24_04-lts'
+  publisher: 'Canonical'
+  sku: 'minimal'
+  version: 'latest'
+}
+
+param vnetName = /* VNet name */
+
+param location =  /* Location */
+
+param publicKey = /* SSH public key*/
+
+param username =  /* OS account username */

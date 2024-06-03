@@ -1,0 +1,11 @@
+using 'template.bicep'
+
+param ipName = /* IP address name */
+
+param location = /* Location */
+
+param vnetGatewayName =  /* VNet Gateway name */
+
+param vnetName =  /* Existing VNet name */
+
+param subnetAddrPrefix = /* Subnet address prefix */

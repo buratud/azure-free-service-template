@@ -1,8 +1,7 @@
 param location string
 
 param username string
-@secure()
-param publicKey string
+param publicKeys array
 param deploymentName string
 param vmSize string = 'Standard_B1s'
 param deleteWithVm bool = true
@@ -22,7 +21,7 @@ resource vnet 'Microsoft.Network/virtualNetworks@2023-05-01' = {
   location: location
   properties: {
     addressSpace: {
-      addressPrefixes: [ '10.1.0.0/16' ]
+      addressPrefixes: ['10.1.0.0/16']
     }
     subnets: [
       { name: 'default', properties: { addressPrefix: '10.1.1.0/24' } }
@@ -50,7 +49,8 @@ resource nic 'Microsoft.Network/networkInterfaces@2023-05-01' = {
   name: nicName
   location: location
   properties: {
-    ipConfigurations: [ {
+    ipConfigurations: [
+      {
         name: 'ipconfig1'
         properties: {
           subnet: {
@@ -92,7 +92,8 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
       imageReference: imageRef
     }
     networkProfile: {
-      networkInterfaces: [ {
+      networkInterfaces: [
+        {
           id: nic.id
           properties: {
             deleteOption: deleteWithVm ? 'Delete' : 'Detach'
@@ -109,7 +110,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
         disablePasswordAuthentication: true
         ssh: {
           publicKeys: [
-            {
+            for publicKey in publicKeys: {
               path: '/home/${username}/.ssh/authorized_keys'
               keyData: publicKey
             }

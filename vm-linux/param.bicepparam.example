@@ -13,6 +13,6 @@ param vnetName = /* VNet name */
 
 param location =  /* Location */
 
-param publicKey = /* SSH public key*/
+param publicKeys = /* List of SSH public key*/
 
 param username =  /* OS account username */

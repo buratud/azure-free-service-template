@@ -3,8 +3,8 @@ using 'template.bicep'
 param deploymentName = /* Deployment name */
 
 param imageRef =  {
+  publisher: 'canonical'
   offer: 'ubuntu-24_04-lts'
-  publisher: 'Canonical'
   sku: 'minimal'
   version: 'latest'
 }

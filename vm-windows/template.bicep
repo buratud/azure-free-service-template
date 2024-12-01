@@ -42,7 +42,22 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2023-05-01' = {
   name: nsgName
   location: location
   properties: {
-    securityRules: []
+    securityRules: [
+      {
+        name: 'AllowRDP'
+        properties: {
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '3389'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          direction: 'Inbound'
+          priority: 100
+          description: 'Allow RDP'
+        }
+      }
+    ]
   }
 }
 

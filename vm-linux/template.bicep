@@ -8,6 +8,8 @@ param deleteWithVm bool = true
 param imageRef object
 param diskSizeGb int = 64
 
+param spotVm bool = false
+
 param vnetName string = '${deploymentName}-vnet'
 param nicName string = '${deploymentName}-nic'
 param nsgName string = '${deploymentName}-nsg'
@@ -140,6 +142,8 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
         vTpmEnabled: true
       }
     }
+    billingProfile: { maxPrice: spotVm ? -1 : null }
+    priority: spotVm ? 'Spot' : 'Regular'
   }
 }
 

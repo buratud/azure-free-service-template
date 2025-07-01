@@ -17,6 +17,7 @@ param publicIpName string = '${deploymentName}-ip'
 param vmName string = deploymentName
 param osDiskName string = '${deploymentName}-osdisk'
 param vmHostName string = deploymentName
+param domainNameLabel string = ''
 
 resource vnet 'Microsoft.Network/virtualNetworks@2023-05-01' = {
   name: vnetName
@@ -36,6 +37,9 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
   location: location
   properties: {
     publicIPAllocationMethod: 'Dynamic'
+    dnsSettings: {
+      domainNameLabel: domainNameLabel != '' ? domainNameLabel : null
+    }
   }
 }
 

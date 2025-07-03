@@ -37,9 +37,13 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
   location: location
   properties: {
     publicIPAllocationMethod: 'Dynamic'
-    dnsSettings: {
-      domainNameLabel: domainNameLabel != '' ? domainNameLabel : null
-    }
+    ...(domainNameLabel != ''
+      ? {
+          dnsSettings: {
+            domainNameLabel: domainNameLabel
+          }
+        }
+      : {})
   }
 }
 

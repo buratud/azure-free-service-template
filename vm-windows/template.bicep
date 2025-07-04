@@ -67,6 +67,20 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2023-05-01' = {
           description: 'Allow SSH'
         }
       }
+      {
+        name: 'AllowRDP'
+        properties: {
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '3389'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '*'
+          access: 'Allow'
+          direction: 'Inbound'
+          priority: 110
+          description: 'Allow RDP'
+        }
+      }
     ]
   }
 }

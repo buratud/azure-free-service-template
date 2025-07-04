@@ -1,17 +1,14 @@
 using 'template.bicep'
 
+param location = 'southeastasia'
 
-param imageRef =  {
+param username = ''
+param password = ''
+param imageRef = {
   publisher: 'MicrosoftWindowsServer'
   offer: 'WindowsServer'
-  sku: '2022-datacenter-azure-edition-hotpatch-smalldisk'
+  sku: '2012-r2-datacenter-smalldisk-g2'
   version: 'latest'
 }
 
-param location =  /* Resource location */
-
-param password =  /* Password for the VM */
-
-param rgName =  /* Resource group name */
-
-param username = /* Username for the VM */
+param deploymentName = ''

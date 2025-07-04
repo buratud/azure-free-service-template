@@ -3,26 +3,29 @@ param location string
 param username string
 @secure()
 param password string
-param rgName string
+param deploymentName string
 param vmSize string = 'Standard_B1s'
 param deleteWithVm bool = true
 param imageRef object
 param diskSizeGb int = 64
 
-param vnetName string = '${rgName}-vnet'
-param nicName string = '${rgName}-nic'
-param nsgName string = '${rgName}-nsg'
-param publicIpName string = '${rgName}-ip'
-param vmName string = rgName
-param osDiskName string = '${rgName}-osdisk'
-param vmHostName string = rgName
+param spotVm bool = false
+
+param vnetName string = '${deploymentName}-vnet'
+param nicName string = '${deploymentName}-nic'
+param nsgName string = '${deploymentName}-nsg'
+param publicIpName string = '${deploymentName}-ip'
+param vmName string = deploymentName
+param osDiskName string = '${deploymentName}-osdisk'
+param vmHostName string = deploymentName
+param domainNameLabel string = ''
 
 resource vnet 'Microsoft.Network/virtualNetworks@2023-05-01' = {
   name: vnetName
   location: location
   properties: {
     addressSpace: {
-      addressPrefixes: [ '10.1.0.0/16' ]
+      addressPrefixes: ['10.1.0.0/16']
     }
     subnets: [
       { name: 'default', properties: { addressPrefix: '10.1.1.0/24' } }
@@ -35,6 +38,13 @@ resource publicIp 'Microsoft.Network/publicIPAddresses@2023-05-01' = {
   location: location
   properties: {
     publicIPAllocationMethod: 'Dynamic'
+    ...(domainNameLabel != ''
+      ? {
+          dnsSettings: {
+            domainNameLabel: domainNameLabel
+          }
+        }
+      : {})
   }
 }
 
@@ -44,17 +54,17 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2023-05-01' = {
   properties: {
     securityRules: [
       {
-        name: 'AllowRDP'
+        name: 'AllowSSH'
         properties: {
           protocol: 'Tcp'
           sourcePortRange: '*'
-          destinationPortRange: '3389'
+          destinationPortRange: '22'
           sourceAddressPrefix: '*'
           destinationAddressPrefix: '*'
           access: 'Allow'
           direction: 'Inbound'
           priority: 100
-          description: 'Allow RDP'
+          description: 'Allow SSH'
         }
       }
     ]
@@ -65,7 +75,8 @@ resource nic 'Microsoft.Network/networkInterfaces@2023-05-01' = {
   name: nicName
   location: location
   properties: {
-    ipConfigurations: [ {
+    ipConfigurations: [
+      {
         name: 'ipconfig1'
         properties: {
           subnet: {
@@ -85,7 +96,6 @@ resource nic 'Microsoft.Network/networkInterfaces@2023-05-01' = {
       id: nsg.id
     }
   }
-
 }
 
 resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
@@ -122,12 +132,11 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
       adminUsername: username
       adminPassword: password
       windowsConfiguration: {
-        enableVMAgentPlatformUpdates: true
-        enableAutomaticUpdates: true
         provisionVMAgent: true
+        enableAutomaticUpdates: true
+        enableVMAgentPlatformUpdates: true
         patchSettings: {
-          enableHotpatching: true
-          patchMode: 'AutomaticByPlatform'
+          patchMode: 'AutomaticByOS'
         }
       }
     }
@@ -138,6 +147,8 @@ resource vm 'Microsoft.Compute/virtualMachines@2023-07-01' = {
         vTpmEnabled: true
       }
     }
+    billingProfile: { maxPrice: spotVm ? -1 : null }
+    priority: spotVm ? 'Spot' : 'Regular'
   }
 }
 

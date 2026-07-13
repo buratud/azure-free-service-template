@@ -3,7 +3,7 @@ param location string
 param username string
 param publicKeys array
 param deploymentName string
-param vmSize string = 'Standard_B1s'
+param vmSize string = 'Standard_B2ats_v2'
 param deleteWithVm bool = true
 param imageRef object
 param diskSizeGb int = 64

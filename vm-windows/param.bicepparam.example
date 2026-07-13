@@ -1,14 +1,15 @@
 using 'template.bicep'
 
-param location = 'southeastasia'
+param deploymentName = /* Deployment name */
 
-param username = ''
-param password = ''
-param imageRef = {
+param imageRef =  {
   publisher: 'MicrosoftWindowsServer'
   offer: 'WindowsServer'
-  sku: '2012-r2-datacenter-smalldisk-g2'
+  sku: '2025-datacenter-core-smalldisk-g2'
   version: 'latest'
 }
 
-param deploymentName = ''
+param location = /* Location */
+
+param username = /* OS account username */
+param password = /* OS account password */

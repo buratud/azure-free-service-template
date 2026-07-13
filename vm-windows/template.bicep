@@ -4,7 +4,7 @@ param username string
 @secure()
 param password string
 param deploymentName string
-param vmSize string = 'Standard_B1s'
+param vmSize string = 'Standard_B2ats_v2'
 param deleteWithVm bool = true
 param imageRef object
 param diskSizeGb int = 64

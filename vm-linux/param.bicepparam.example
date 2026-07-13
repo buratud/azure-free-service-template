@@ -10,9 +10,7 @@ param imageRef =  {
 }
 
 param vnetName = /* VNet name */
+param location = /* Location */
 
-param location =  /* Location */
-
+param username = /* OS account username */
 param publicKeys = /* List of SSH public key*/
-
-param username =  /* OS account username */
